@@ -28,7 +28,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(11.8, 61.7, Math.toRadians(90));
+        Pose2d initialPose = new Pose2d(50, 0, Math.toRadians(90));
         drive = new MecanumDrive(hardwareMap, initialPose);
         claw = new Claw(hardwareMap);
         arm = new Arm(hardwareMap);
@@ -37,10 +37,10 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
                 .lineToYSplineHeading(30, Math.toRadians(90)) // Moves along y-axis with heading aligned to face forward
-                .turn(Math.toRadians(90))                      // Turn to face the x-axis
-                .lineToX(20)                                   // Move horizontally along x-axis
-                .turn(Math.toRadians(45))                      // Adjust heading by 45 degrees
-                .lineToYSplineHeading(60, Math.toRadians(90))  // Move along y-axis again with forward heading
+               // .turn(Math.toRadians(90))                      // Turn to face the x-axis
+               // .lineToX(20)                                   // Move horizontally along x-axis
+               // .turn(Math.toRadians(45))                      // Adjust heading by 45 degrees
+               // .lineToYSplineHeading(60, Math.toRadians(90))  // Move along y-axis again with forward heading
                 .waitSeconds(3);
 
 
@@ -75,9 +75,6 @@ public class IntoTheDeepAuto extends LinearOpMode {
                 .strafeTo(new Vector2d(48, 12))
                 .build();
 
-        // Initial claw action
-        Actions.runBlocking(claw.closeClaw());
-
         int visionOutputPosition = getVisionOutput();
         telemetry.addData("Starting Position", visionOutputPosition);
         telemetry.update();
@@ -102,8 +99,8 @@ public class IntoTheDeepAuto extends LinearOpMode {
                         selectedTrajectoryAction,
                         wrist.setWristPositionAction(0.3),
                         arm.moveArmAction(50, 0.5),
-                        lift.moveSlideAction(300, 0.5),
-                        trajectoryActionCloseOut
+                        lift.moveSlideAction(300, 0.5)
+                       // trajectoryActionCloseOut
                 )
         );
     }
