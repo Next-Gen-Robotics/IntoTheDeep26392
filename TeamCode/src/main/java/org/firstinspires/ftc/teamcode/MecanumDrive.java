@@ -60,17 +60,17 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
         // drive model parameters
-        // Traveled distance in incches 121.5 / Tick: 4988.25
+        // Traveled distance in inches 121.5 / Tick: 4988.25
         public double inPerTick = 0.0243572395128552; //Default 1
         //Lateral,distance in inches 120 /Ticks 4462.5
         public double lateralInPerTick = 0.026890756302521;  // default inPerTick;
-        public double trackWidthTicks = 1138.6717849614204; // default zero
+        public double trackWidthTicks = 1135.7256202481983;   // 1130.8821539926341   1138.6717849614204; // default zero
 
         // feedforward parameters (in tick units)
         // kV: 0.0041635482994107085, kS: 1.099369273080118
-        public double kS = 1.099369273080118;
-        public double kV = 0.0041635482994107085;
-        public double kA = 0.0001;
+        public double kS = 1.0924546065646332; //1.0314471881864353 1.029497033725252 1.099369273080118;
+        public double kV = 0.004187253938148466; //0.004216936919002071 0.004220755324173304;   0.0041635482994107085;
+        public double kA = 0.000001;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -84,7 +84,7 @@ public final class MecanumDrive {
         // path controller gains
         public double axialGain = 0.0;
         public double lateralGain = 0.0;
-        public double headingGain = 0.0; // shared with turn
+        public double headingGain = 8.2; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import androidx.annotation.NonNull;
+
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.Action;
@@ -28,7 +30,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(50, 0, Math.toRadians(90));
+        Pose2d initialPose = new Pose2d(-24, -72, Math.toRadians(180));
         drive = new MecanumDrive(hardwareMap, initialPose);
         claw = new Claw(hardwareMap);
         arm = new Arm(hardwareMap);
@@ -36,15 +38,10 @@ public class IntoTheDeepAuto extends LinearOpMode {
         lift = new Lift(hardwareMap);
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .lineToYSplineHeading(30, Math.toRadians(90)) // Moves along y-axis with heading aligned to face forward
-               // .turn(Math.toRadians(90))                      // Turn to face the x-axis
-               // .lineToX(20)                                   // Move horizontally along x-axis
-               // .turn(Math.toRadians(45))                      // Adjust heading by 45 degrees
-               // .lineToYSplineHeading(60, Math.toRadians(90))  // Move along y-axis again with forward heading
+                .splineTo(new Vector2d(-60, -55), Math.toRadians(225))  // Point exactly toward the red team wall corner
                 .waitSeconds(3);
 
-
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
+       /* TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
                 .lineToY(37)
                 .setTangent(Math.toRadians(0))
                 .lineToX(18)
@@ -71,10 +68,15 @@ public class IntoTheDeepAuto extends LinearOpMode {
                 .lineToX(47.5)
                 .waitSeconds(3);
 
+        TrajectoryActionBuilder trajacotrySample = drive.actionBuilder(new Pose2d(-60, -55, Math.toRadians(225))) // Start from the last pose
+                .turn(Math.toRadians(-135))  // Rotate by -135 degrees to face the wall between red and blue alliances
+                .waitSeconds(3);
+
+
         Action trajectoryActionCloseOut = tab1.fresh()
                 .strafeTo(new Vector2d(48, 12))
                 .build();
-
+        */
         int visionOutputPosition = getVisionOutput();
         telemetry.addData("Starting Position", visionOutputPosition);
         telemetry.update();
@@ -84,25 +86,35 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
         // Select trajectory based on vision position
         Action selectedTrajectoryAction;
-        if (visionOutputPosition == 1) {
+        selectedTrajectoryAction = tab1.build();
+        /* if (visionOutputPosition == 1) {
             selectedTrajectoryAction = tab1.build();
-        } else if (visionOutputPosition == 2) {
+        }  else if (visionOutputPosition == 2) {
             selectedTrajectoryAction = tab2.build();
         } else {
             selectedTrajectoryAction = tab3.build();
-        }
+        } */
 
         // Execute the selected sequence of actions
         Actions.runBlocking(
                 new SequentialAction(
-                        claw.closeClaw(),
-                        selectedTrajectoryAction,
-                        wrist.setWristPositionAction(0.3),
-                        arm.moveArmAction(50, 0.5),
-                        lift.moveSlideAction(300, 0.5)
-                       // trajectoryActionCloseOut
+                        claw.closeClaw(), // Step 1: Close the claw
+                        new ParallelAction(
+                                selectedTrajectoryAction, // Step 2: Move along the trajectory while performing actions in parallel
+                                wrist.setWristPositionAction(0.3), // Set wrist position
+                                arm.moveArmAction(100, 0.5),       // Lift the arm
+                                lift.moveSlideAction(600, 0.5)     // Extend the slide
+                        ),
+                        claw.openClaw(), // Step 3: Open the claw upon reaching the destination
+                        claw.closeClaw(), // Step 4: Close the claw again
+                        new ParallelAction(
+                                lift.moveSlideAction(0, 0.5),     // Retract the slide to position 0
+                                arm.moveArmAction(0, 0.5)  // Bring down the arm to position 0
+           //                     trajacotrySample.build()
+                        )
                 )
         );
+
     }
 
     // Classes for Arm, Lift, Wrist, and Claw with action-based methods

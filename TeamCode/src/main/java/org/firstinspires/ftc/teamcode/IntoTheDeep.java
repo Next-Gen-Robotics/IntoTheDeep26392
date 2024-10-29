@@ -28,11 +28,12 @@ public class IntoTheDeep extends LinearOpMode {
     private double armPositionDegrees = 0; // Using degrees for arm position
     private double slidePositionMM = 0;    // Using millimeters for slide position
     private double wristPosition = 0;      // Wrist servo position
+    private final double joystickThreshold = 0.05; // Threshold to ignore minor joystick inputs
 
     @Override
     public void runOpMode() {
         // Initialize hardware and MecanumDrive
-        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+        drive = new MecanumDrive(hardwareMap, new Pose2d(-24, -72, Math.toRadians(180)));
         slideMotor = hardwareMap.get(DcMotorEx.class, "slideMotor");
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         wrist = hardwareMap.get(Servo.class, "wrist");
@@ -60,8 +61,14 @@ public class IntoTheDeep extends LinearOpMode {
             double x = gamepad1.left_stick_x;  // Left/right strafing
             double rx = gamepad1.right_stick_x; // Rotation
 
-            PoseVelocity2d drivePowers = new PoseVelocity2d(new Vector2d(y, x), rx);
-            drive.setDrivePowers(drivePowers);
+            // Only move if joystick input exceeds the threshold
+            if (Math.abs(y) > joystickThreshold || Math.abs(x) > joystickThreshold || Math.abs(rx) > joystickThreshold) {
+                PoseVelocity2d drivePowers = new PoseVelocity2d(new Vector2d(y, x), rx);
+                drive.setDrivePowers(drivePowers);
+            } else {
+                // Stop the drivetrain if joystick is within the deadzone
+                drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
+            }
 
             // Slide control using bumpers
             if (gamepad1.right_bumper) {
