@@ -30,7 +30,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(-24, -72, Math.toRadians(180));
+        Pose2d initialPose = new Pose2d(14.57, 62.61, Math.toRadians(-89.32));
         drive = new MecanumDrive(hardwareMap, initialPose);
         claw = new Claw(hardwareMap);
         arm = new Arm(hardwareMap);
@@ -38,7 +38,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         lift = new Lift(hardwareMap);
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .splineTo(new Vector2d(-60, -55), Math.toRadians(225))  // Point exactly toward the red team wall corner
+                .splineTo(new Vector2d(53.21, 53.21), Math.toRadians(45.00))  // Point exactly toward the red team wall corner
                 .waitSeconds(3);
 
        /* TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
