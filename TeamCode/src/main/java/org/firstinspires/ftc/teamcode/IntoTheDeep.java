@@ -76,7 +76,7 @@ public class IntoTheDeep extends LinearOpMode {
             } else if (gamepad1.left_bumper) {
                 slidePositionMM -= 5; // Lower slide
             }
-            slidePositionMM = Range.clip(slidePositionMM, 0, 600); // Limit slide position
+            slidePositionMM = Range.clip(slidePositionMM, 0, 650); // Limit slide position
             int slideTargetPosition = (int) (slidePositionMM * LIFT_TICKS_PER_MM); // Convert mm to ticks
             slideMotor.setTargetPosition(slideTargetPosition);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -104,11 +104,11 @@ public class IntoTheDeep extends LinearOpMode {
 
             // Claw control using A (close), X (neutral), and B (open)
             if (gamepad1.b) {
-                claw.setPosition(0.9368);  // Open the claw
+                claw.setPosition(0.7);  // Open the claw
             } else if (gamepad1.a) {
-                claw.setPosition(0.7030);  // Close the claw
+                claw.setPosition(0.5);  // Close the claw
             } else if (gamepad1.x) {
-                claw.setPosition(0.10);  // Neutral position
+                claw.setPosition(0.49);  // Neutral position
             }
 
             // Telemetry for debugging and calibration

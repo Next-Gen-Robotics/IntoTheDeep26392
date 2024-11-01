@@ -38,20 +38,61 @@ public class IntoTheDeepAuto extends LinearOpMode {
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
                 .splineTo(new Vector2d(53.21, 53.21), Math.toRadians(45.00));
 
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(53.21, 53.21, Math.toRadians(45.00)))
+                .splineTo(new Vector2d(47.77, 40.62), Math.toRadians(270.00));
+
+        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(47.77, 40.62, Math.toRadians(270.00)))
+                .splineTo(new Vector2d(53.45, 53.45), Math.toRadians(45.00));
+
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(53.21, 53.21, Math.toRadians(45.00)))
+                .setReversed(true)
+                .splineTo(new Vector2d(38.12, 34.68), Math.toRadians(240.73))
+                .setReversed(false);
+               // .lineTo(new Vector2d(31.02, 12.71));
+
         waitForStart();
         if (isStopRequested()) return;
 
         // Execute each step in the sequence individually using runBlocking
         Actions.runBlocking(claw.closeClaw());                // Step 1: Close the claw
         Actions.runBlocking(tab1.build());                    // Step 2: Follow trajectory
-        Actions.runBlocking(arm.moveArmAction(100, 0.5));     // Step 3: Lift arm
+        upperBasket();
+        Actions.runBlocking(tab2.build());
+        Actions.runBlocking(arm.moveArmAction(5, 0.5));
+        Actions.runBlocking(claw.closeClaw());
+        sleep(250);
+        Actions.runBlocking(arm.moveArmAction(80, 0.5));
+        Actions.runBlocking(lift.moveSlideAction(0, 0.7));
+        // Go To basket
+       Actions.runBlocking(tab3.build());
+       upperBasketSecond();
+                  // Step 8: Retract slide
+    }
+
+    private void upperBasket()
+    {
+        Actions.runBlocking(arm.moveArmAction(100, 0.6));     // Step 3: Lift arm
         Actions.runBlocking(wrist.setWristPositionAction(0.37));
-        Actions.runBlocking(lift.moveSlideAction(650, 0.5));  // Step 4: Extend slide
-        Actions.runBlocking(arm.moveArmAction(88, 0.5));      // Step 5: Position arm
-        Actions.runBlocking(claw.openClaw());                 // Step 7: Open claw
-        Actions.runBlocking(arm.moveArmAction(100, 0.5));
-        Actions.runBlocking(lift.moveSlideAction(0, 0.5));    // Step 8: Retract slide
-        Actions.runBlocking(arm.moveArmAction(0, 0.5));       // Step 9: Lower arm
+        Actions.runBlocking(lift.moveSlideAction(655, 0.7));  // Step 4: Extend slide
+        Actions.runBlocking(arm.moveArmAction(88, 0.6));      // Step 5: Position arm
+        Actions.runBlocking(claw.openClaw());
+        sleep(100);
+        Actions.runBlocking(arm.moveArmAction(98, 0.5));
+        Actions.runBlocking(lift.moveSlideAction(270, 0.5));    // Step 8: Retract slide
+    }
+
+    private void upperBasketSecond()
+    {
+        Actions.runBlocking(wrist.setWristPositionAction(0));
+        Actions.runBlocking(arm.moveArmAction(105, 0.6));     // Step 3: Lift arm
+        Actions.runBlocking(wrist.setWristPositionAction(0.37));
+        Actions.runBlocking(lift.moveSlideAction(655, 0.7));  // Step 4: Extend slide
+        Actions.runBlocking(arm.moveArmAction(90, 0.5));      // Step 5: Position arm
+        Actions.runBlocking(claw.openClaw());
+        sleep(100);
+        Actions.runBlocking(arm.moveArmAction(98, 0.5));
+        Actions.runBlocking(lift.moveSlideAction(0, 0.6));    // Step 8: Retract slide
+        Actions.runBlocking(arm.moveArmAction(0, 0.6));
     }
 
     public class Arm {
@@ -187,7 +228,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         }
 
         public Action closeClaw() {
-            return new ClawPositionAction(0.5);
+            return new ClawPositionAction(0.46);
         }
 
         public Action openClaw() {
