@@ -14,8 +14,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="IntoTheDeepAuto", group="Autonomous")
-public class IntoTheDeepAuto extends LinearOpMode {
+@Autonomous(name="Specimen", group="Autonomous")
+public class Specimen extends LinearOpMode {
 
     private MecanumDrive drive;
     private Arm arm;
@@ -28,7 +28,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(14.57, 62.61, Math.toRadians(-90));
+        Pose2d initialPose = new Pose2d(-9.50, 63.53, Math.toRadians(270));
         drive = new MecanumDrive(hardwareMap, initialPose);
         claw = new Claw(hardwareMap);
         arm = new Arm(hardwareMap);
@@ -36,61 +36,81 @@ public class IntoTheDeepAuto extends LinearOpMode {
         lift = new Lift(hardwareMap);
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .splineTo(new Vector2d(53.21, 53.21), Math.toRadians(45.00));
+                .lineToY(40);
 
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(53.21, 53.21, Math.toRadians(45.00)))
-                .splineTo(new Vector2d(47.77, 40.62), Math.toRadians(270.00));
-
-        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(47.77, 40.62, Math.toRadians(270.00)))
-                .splineTo(new Vector2d(53.45, 53.45), Math.toRadians(45.00));
-
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(53.45, 53.45, Math.toRadians(45.00)))
-                .splineTo(new Vector2d(38.12, 34.68), Math.toRadians(240.73));
-        // .lineTo(new Vector2d(31.02, 12.71));
+        // Go to first sample
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-9.50, 35, Math.toRadians(270)))
+                .lineToY(40.62)
+                .strafeTo(new Vector2d(-67.77,40.62));
+        // turn to drop first sample
+        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(270)))
+                .turn(Math.toRadians(180));
+               // .strafeTo(new Vector2d(-35,40.62));
+        //turn and go to second sample
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(90)))
+                .turn(Math.toRadians(180))
+                .strafeTo(new Vector2d(-78.77,40.62));
+        // turn to drop second sample
+        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(270)))
+                .turn(Math.toRadians(180));
+        // turn for parking
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(90)))
+                .turn(Math.toRadians(-180))
+                .strafeTo(new Vector2d(-79.77,55.62));
 
         waitForStart();
         if (isStopRequested()) return;
 
         // Execute each step in the sequence individually using runBlocking
         Actions.runBlocking(claw.closeClaw());                // Step 1: Close the claw
-        Actions.runBlocking(tab1.build());                    // Step 2: Follow trajectory
-        upperBasket();
+        Actions.runBlocking(tab1.build());
+        Actions.runBlocking(arm.moveArmAction(76, 0.5));// Step 2: Follow trajectory
+        Actions.runBlocking(wrist.setWristPositionAction(0.37));
+        Actions.runBlocking(lift.moveSlideAction(310, 0.5));
+        Actions.runBlocking(arm.moveArmAction(60, 0.5));// Step 2: Follow trajectory
+        sleep(100);
+        Actions.runBlocking(lift.moveSlideAction(168, 0.5));
+        sleep(100);
+        Actions.runBlocking(claw.openClaw());
+        sleep(100);
         Actions.runBlocking(tab2.build());
+        pickupSample();
+        // Turn left and go to observation zone and drop sample
+        Actions.runBlocking(tab3.build());
+        Actions.runBlocking(claw.openClaw());
+        sleep(100);
+        Actions.runBlocking(lift.moveSlideAction(100, 0.5));
+        Actions.runBlocking(tab4.build());
+        Actions.runBlocking(arm.moveArmAction(35,0.5));
+        pickupSecondSample();
+        Actions.runBlocking(tab5.build());
+        Actions.runBlocking(claw.openClaw());
+        sleep(100);
+        Actions.runBlocking(lift.moveSlideAction(0,0.5));
+        Actions.runBlocking(arm.moveArmAction(0,0.5));
+        Actions.runBlocking(tab6.build());
+    }
+
+    private void pickupSample()
+    {
+        //pickup sample
+        Actions.runBlocking(lift.moveSlideAction(355, 0.5));
         Actions.runBlocking(arm.moveArmAction(5, 0.5));
         Actions.runBlocking(claw.closeClaw());
-        sleep(250);
-        Actions.runBlocking(arm.moveArmAction(80, 0.5));
-        Actions.runBlocking(lift.moveSlideAction(0, 0.7));
-        // Go To basket
-        Actions.runBlocking(tab3.build());
-        upperBasketSecond();
-        // Step 8: Retract slide
+        sleep(500);
+        Actions.runBlocking(arm.moveArmAction(20, 0.5));
+        Actions.runBlocking(lift.moveSlideAction(300, 0.5));
     }
 
-    private void upperBasket()
+    private void pickupSecondSample()
     {
-        Actions.runBlocking(arm.moveArmAction(100, 0.6));     // Step 3: Lift arm
-        Actions.runBlocking(wrist.setWristPositionAction(0.37));
-        Actions.runBlocking(lift.moveSlideAction(655, 0.7));  // Step 4: Extend slide
-        Actions.runBlocking(arm.moveArmAction(88, 0.6));      // Step 5: Position arm
-        Actions.runBlocking(claw.openClaw());
-        sleep(100);
-        Actions.runBlocking(arm.moveArmAction(98, 0.5));
-        Actions.runBlocking(lift.moveSlideAction(270, 0.5));    // Step 8: Retract slide
-    }
-
-    private void upperBasketSecond()
-    {
-        Actions.runBlocking(wrist.setWristPositionAction(0));
-        Actions.runBlocking(arm.moveArmAction(105, 0.6));     // Step 3: Lift arm
-        Actions.runBlocking(wrist.setWristPositionAction(0.37));
-        Actions.runBlocking(lift.moveSlideAction(655, 0.7));  // Step 4: Extend slide
-        Actions.runBlocking(arm.moveArmAction(90, 0.5));      // Step 5: Position arm
-        Actions.runBlocking(claw.openClaw());
-        sleep(100);
-        Actions.runBlocking(arm.moveArmAction(98, 0.5));
-        Actions.runBlocking(lift.moveSlideAction(0, 0.6));    // Step 8: Retract slide
-        Actions.runBlocking(arm.moveArmAction(0, 0.6));
+        //pickup sample
+        Actions.runBlocking(lift.moveSlideAction(280, 0.5));
+        Actions.runBlocking(arm.moveArmAction(5, 0.5));
+        Actions.runBlocking(claw.closeClaw());
+        sleep(500);
+        Actions.runBlocking(arm.moveArmAction(20, 0.5));
+        Actions.runBlocking(lift.moveSlideAction(300, 0.5));
     }
 
     public class Arm {

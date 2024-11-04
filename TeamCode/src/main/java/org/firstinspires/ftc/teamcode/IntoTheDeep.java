@@ -58,8 +58,8 @@ public class IntoTheDeep extends LinearOpMode {
         while (opModeIsActive()) {
             // Drivetrain controls using MecanumDrive
             double y = -gamepad1.left_stick_y; // Forward/backward
-            double x = gamepad1.left_stick_x;  // Left/right strafing
-            double rx = gamepad1.right_stick_x; // Rotation
+            double x = - gamepad1.left_stick_x;  // Left/right strafing
+            double rx = - gamepad1.right_stick_x; // Rotation
 
             // Only move if joystick input exceeds the threshold
             if (Math.abs(y) > joystickThreshold || Math.abs(x) > joystickThreshold || Math.abs(rx) > joystickThreshold) {
@@ -106,7 +106,7 @@ public class IntoTheDeep extends LinearOpMode {
             if (gamepad1.b) {
                 claw.setPosition(0.7);  // Open the claw
             } else if (gamepad1.a) {
-                claw.setPosition(0.5);  // Close the claw
+                claw.setPosition(0.46);  // Close the claw
             } else if (gamepad1.x) {
                 claw.setPosition(0.49);  // Neutral position
             }
