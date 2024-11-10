@@ -35,64 +35,73 @@ public class IntoTheDeepAuto extends LinearOpMode {
         wrist = new Wrist(hardwareMap);
         lift = new Lift(hardwareMap);
 
-        TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .splineTo(new Vector2d(53.21, 53.21), Math.toRadians(45.00));
+        TrajectoryActionBuilder goToBasketZero = drive.actionBuilder(initialPose)
+                .splineTo(new Vector2d(53, 53), Math.toRadians(45.00));
 
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(53.21, 53.21, Math.toRadians(45.00)))
-                .splineTo(new Vector2d(47.77, 40.62), Math.toRadians(270.00));
+        TrajectoryActionBuilder goToSample1 = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
+                .turn(Math.toRadians(-155));
+        TrajectoryActionBuilder goToBasketOne = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-160)))
+                .turn(Math.toRadians(200));
+        TrajectoryActionBuilder goToSampleTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
+                .turn(Math.toRadians(-138));
+        TrajectoryActionBuilder goToBasketTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-135)))
+                .turn(Math.toRadians(195));
+        TrajectoryActionBuilder goToSampleThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
+                .turn(Math.toRadians(-105));
+        TrajectoryActionBuilder goToBasketThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-105)))
+                .turn(Math.toRadians(105));
 
-        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(47.77, 40.62, Math.toRadians(270.00)))
-                .splineTo(new Vector2d(53.45, 53.45), Math.toRadians(45.00));
-
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(53.45, 53.45, Math.toRadians(45.00)))
-                .splineTo(new Vector2d(38.12, 34.68), Math.toRadians(240.73));
-        // .lineTo(new Vector2d(31.02, 12.71));
+        TrajectoryActionBuilder goToAscent = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45)))
+                .strafeTo(new Vector2d(32.17,0.80));
 
         waitForStart();
         if (isStopRequested()) return;
 
         // Execute each step in the sequence individually using runBlocking
         Actions.runBlocking(claw.closeClaw());                // Step 1: Close the claw
-        Actions.runBlocking(tab1.build());                    // Step 2: Follow trajectory
+        Actions.runBlocking(goToBasketZero.build());                    // Step 2: Follow trajectory
         upperBasket();
-        Actions.runBlocking(tab2.build());
-        Actions.runBlocking(arm.moveArmAction(5, 0.5));
+        Actions.runBlocking(goToSample1.build());
+        Actions.runBlocking(arm.moveArmAction(5, 1));
         Actions.runBlocking(claw.closeClaw());
-        sleep(250);
-        Actions.runBlocking(arm.moveArmAction(80, 0.5));
-        Actions.runBlocking(lift.moveSlideAction(0, 0.7));
+        sleep(100);
+        Actions.runBlocking(arm.moveArmAction(100, 1));
+       // Actions.runBlocking(lift.moveSlideAction(0, 0.7));
         // Go To basket
-        Actions.runBlocking(tab3.build());
-        upperBasketSecond();
+        Actions.runBlocking(goToBasketOne.build());
+        upperBasket();
+        Actions.runBlocking(goToSampleTwo.build());
+        Actions.runBlocking(arm.moveArmAction(5, 1));
+        Actions.runBlocking(claw.closeClaw());
+        sleep(100);
+        Actions.runBlocking(arm.moveArmAction(105, 1));
+        Actions.runBlocking(goToBasketTwo.build());
+        upperBasket();
+        Actions.runBlocking(wrist.setWristPositionAction(0.57));
+        Actions.runBlocking(goToSampleThree.build());
+        Actions.runBlocking(arm.moveArmAction(5, 1));
+        Actions.runBlocking(claw.closeClaw());
+        sleep(100);
+        Actions.runBlocking(arm.moveArmAction(105, 1));
+        Actions.runBlocking(goToBasketThree.build());
+        upperBasket();
+        Actions.runBlocking(lift.moveSlideAction(0, 1));
+        Actions.runBlocking(arm.moveArmAction(105, 1));
+        Actions.runBlocking(goToAscent.build());
         // Step 8: Retract slide
     }
 
     private void upperBasket()
     {
-        Actions.runBlocking(arm.moveArmAction(100, 0.6));     // Step 3: Lift arm
+        Actions.runBlocking(arm.moveArmAction(100, 1));     // Step 3: Lift arm
         Actions.runBlocking(wrist.setWristPositionAction(0.66));
-        Actions.runBlocking(lift.moveSlideAction(655, 0.7));  // Step 4: Extend slide
-        Actions.runBlocking(arm.moveArmAction(88, 0.6));      // Step 5: Position arm
+        Actions.runBlocking(lift.moveSlideAction(655, 1));  // Step 4: Extend slide
+        Actions.runBlocking(arm.moveArmAction(92, 1));      // Step 5: Position arm
         Actions.runBlocking(claw.openClaw());
         sleep(100);
-        Actions.runBlocking(arm.moveArmAction(98, 0.5));
-        Actions.runBlocking(lift.moveSlideAction(270, 0.5));    // Step 8: Retract slide
+        Actions.runBlocking(arm.moveArmAction(100, 1));
+        Actions.runBlocking(lift.moveSlideAction(482, 1));    // Step 8: Retract slide
     }
-
-    private void upperBasketSecond()
-    {
-        Actions.runBlocking(wrist.setWristPositionAction(0));
-        Actions.runBlocking(arm.moveArmAction(105, 0.6));     // Step 3: Lift arm
-        Actions.runBlocking(wrist.setWristPositionAction(0.37));
-        Actions.runBlocking(lift.moveSlideAction(655, 0.7));  // Step 4: Extend slide
-        Actions.runBlocking(arm.moveArmAction(90, 0.5));      // Step 5: Position arm
-        Actions.runBlocking(claw.openClaw());
-        sleep(100);
-        Actions.runBlocking(arm.moveArmAction(98, 0.5));
-        Actions.runBlocking(lift.moveSlideAction(0, 0.6));    // Step 8: Retract slide
-        Actions.runBlocking(arm.moveArmAction(0, 0.6));
-    }
-
     public class Arm {
         private DcMotorEx armMotor;
 
@@ -230,7 +239,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         }
 
         public Action openClaw() {
-            return new ClawPositionAction(0.6294);
+            return new ClawPositionAction(0.75); //0.6294
         }
 
         private class ClawPositionAction implements Action {
