@@ -60,31 +60,31 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
         // drive model parameters
-        // Traveled distance in inches 121.5 / Tick: 4988.25
-        public double inPerTick = 0.0243572395128552; //Default 1
-        //Lateral,distance in inches 120 /Ticks 4462.5
-        public double lateralInPerTick = 0.026890756302521;  // default inPerTick;
-        public double trackWidthTicks = 1135.7256202481983;   // 1130.8821539926341   1138.6717849614204; // default zero
+        // Traveled distance in inches 119/ 114/38674
+        public double inPerTick = 0.0029477168123287; // 0.0243572395128552; //Default 1
+        //Lateral,distance in inches 104 /Ticks -1282
+        // 0.002428535317457635
+        public double lateralInPerTick =  0.002398141936572116; //manual 0.026890756302521;  // default inPerTick;
+        public double trackWidthTicks =  4567.58608101934; //1135.7256202481983;  // default zero
 
         // feedforward parameters (in tick units)
-        // kV: 0.0041635482994107085, kS: 1.099369273080118
-        public double kS = 0.44;   // 1.04 1.0924546065646332;
-        public double kV = 0.0042;   // 0.004187253938148466;
-        public double kA = 0.000001;
+        public double kS = 0.9649515589830022;
+        public double kV = 0.000426;  ///0.0005269879619291605;
+        public double kA = 0.0001;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 42;  // 50;
+        public double maxWheelVel = 50;  // 50;
         public double minProfileAccel = -30;
-        public double maxProfileAccel = 42; // 50;
+        public double maxProfileAccel = 50; // 50;
 
         // turn profile parameters (in radians)
         public double maxAngVel = Math.PI; // shared with path
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 0.2; // 0.0;
-        public double lateralGain = 0.2; //0.0;
-        public double headingGain = 12; // shared with turn
+        public double axialGain = 1.5; // 0.0;
+        public double lateralGain = 0.3; //0.0;
+        public double headingGain = 4; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
@@ -233,7 +233,8 @@ public final class MecanumDrive {
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        localizer = new DriveLocalizer();
+        //localizer = new DriveLocalizer();
+        localizer = new TwoDeadWheelLocalizer(hardwareMap, lazyImu.get(), PARAMS.inPerTick);
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
