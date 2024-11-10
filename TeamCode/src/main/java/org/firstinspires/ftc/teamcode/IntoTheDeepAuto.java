@@ -70,7 +70,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
     private void upperBasket()
     {
         Actions.runBlocking(arm.moveArmAction(100, 0.6));     // Step 3: Lift arm
-        Actions.runBlocking(wrist.setWristPositionAction(0.37));
+        Actions.runBlocking(wrist.setWristPositionAction(0.66));
         Actions.runBlocking(lift.moveSlideAction(655, 0.7));  // Step 4: Extend slide
         Actions.runBlocking(arm.moveArmAction(88, 0.6));      // Step 5: Position arm
         Actions.runBlocking(claw.openClaw());
@@ -226,11 +226,11 @@ public class IntoTheDeepAuto extends LinearOpMode {
         }
 
         public Action closeClaw() {
-            return new ClawPositionAction(0.46);
+            return new ClawPositionAction(0.5581);
         }
 
         public Action openClaw() {
-            return new ClawPositionAction(0.8);
+            return new ClawPositionAction(0.6294);
         }
 
         private class ClawPositionAction implements Action {

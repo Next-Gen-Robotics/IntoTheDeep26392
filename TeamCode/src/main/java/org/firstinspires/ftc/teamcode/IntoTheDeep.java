@@ -96,7 +96,7 @@ public class IntoTheDeep extends LinearOpMode {
 
             // Wrist control using D-pad left/right
             if (gamepad1.dpad_right) {
-                wristPosition = Math.max(0, wristPosition - 0.01); // Move wrist in
+                wristPosition = Math.max(0.32, wristPosition - 0.01); // Move wrist in
             } else if (gamepad1.dpad_left) {
                 wristPosition = Math.min(1, wristPosition + 0.01); // Move wrist out
             }
