@@ -39,52 +39,185 @@ public class IntoTheDeepAuto extends LinearOpMode {
                 .splineTo(new Vector2d(53, 53), Math.toRadians(45.00));
 
         TrajectoryActionBuilder goToSample1 = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
-                .turn(Math.toRadians(-155));
+                .turn(Math.toRadians(-150));
         TrajectoryActionBuilder goToBasketOne = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-160)))
-                .turn(Math.toRadians(200));
+                .turn(Math.toRadians(205));
         TrajectoryActionBuilder goToSampleTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
-                .turn(Math.toRadians(-138));
+                .turn(Math.toRadians(-130));
         TrajectoryActionBuilder goToBasketTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-135)))
-                .turn(Math.toRadians(195));
+                .turn(Math.toRadians(205));
         TrajectoryActionBuilder goToSampleThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
-                .turn(Math.toRadians(-105));
+                .turn(Math.toRadians(-108));
         TrajectoryActionBuilder goToBasketThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-105)))
-                .turn(Math.toRadians(105));
+                .turn(Math.toRadians(140));
 
         TrajectoryActionBuilder goToAscent = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45)))
-                .strafeTo(new Vector2d(32.17,0.80));
+                .strafeTo(new Vector2d(50,0));
 
         waitForStart();
         if (isStopRequested()) return;
 
         // Execute each step in the sequence individually using runBlocking
         Actions.runBlocking(claw.closeClaw());                // Step 1: Close the claw
-        Actions.runBlocking(goToBasketZero.build());                    // Step 2: Follow trajectory
+        class drive0 extends Thread{
+            public void run() {
+                Actions.runBlocking(goToBasketZero.build());
+            }
+        }
+                          // Step 2: Follow trajectory
+        class UpBPart1 extends Thread {
+            public void run() {
+                Actions.runBlocking(wrist.setWristPositionAction(0.66));
+                Actions.runBlocking(arm.moveArmAction(105, 1));     // Step 3: Lift arm
+                Actions.runBlocking(lift.moveSlideAction(655, 1));  // Step 4: Extend slide
+
+            }
+        }
+
+        drive0 tobasket = new drive0();
+        UpBPart1 score = new UpBPart1();
+        tobasket.start();
+        score.start();
+        try {
+            tobasket.join();
+            score.join();
+        } catch (InterruptedException e){
+            //empty
+        }
+//        Actions.runBlocking(arm.moveArmAction(92, 1));
         upperBasket();
-        Actions.runBlocking(goToSample1.build());
-        Actions.runBlocking(arm.moveArmAction(5, 1));
+
+        class turnsample1 extends Thread{
+            public void run(){
+                Actions.runBlocking(goToSample1.build());
+            }
+        }
+        class armdown extends Thread{
+            public void run(){
+                Actions.runBlocking(arm.moveArmAction(15, .5));
+            }
+        }
+        turnsample1 turnto = new turnsample1();
+        armdown armmove = new armdown();
+        turnto.start();
+        armmove.start();
+        try {
+            turnto.join();
+            armmove.join();
+        } catch (InterruptedException e){
+            //empty
+        }
+        Actions.runBlocking(lift.moveSlideAction(660,1));
         Actions.runBlocking(claw.closeClaw());
-        sleep(100);
-        Actions.runBlocking(arm.moveArmAction(100, 1));
+        sleep(200);
+        Actions.runBlocking(arm.moveArmAction(105, 1));
         // Actions.runBlocking(lift.moveSlideAction(0, 0.7));
+
+
         // Go To basket
-        Actions.runBlocking(goToBasketOne.build());
+        class drive1 extends Thread{
+            public void run(){
+                Actions.runBlocking(goToBasketOne.build());
+            }
+        }
+        drive1 tobasket1 = new drive1();
+        tobasket1.start();
+        score.start();
+        try {
+            tobasket1.join();
+            score.join();
+        } catch (InterruptedException e){
+            //empty
+        }
+//        Actions.runBlocking(arm.moveArmAction(92, 1));
         upperBasket();
-        Actions.runBlocking(goToSampleTwo.build());
-        Actions.runBlocking(arm.moveArmAction(5, 1));
+
+        Actions.runBlocking(lift.moveSlideAction(485,1));
+        class turnsample2 extends Thread{
+            public void run() {
+                Actions.runBlocking(goToSampleTwo.build());
+            }
+        }
+        //grab
+        turnsample2 turnto2 = new turnsample2();
+        turnto2.start();
+        armmove.start();
+        try {
+            turnto2.join();
+            armmove.join();
+        } catch (InterruptedException e){
+            //empty
+        }
+
+        Actions.runBlocking(lift.moveSlideAction(660,1));
         Actions.runBlocking(claw.closeClaw());
-        sleep(100);
+        sleep(200);
         Actions.runBlocking(arm.moveArmAction(105, 1));
-        Actions.runBlocking(goToBasketTwo.build());
+
+        //go to basket
+        class drive2 extends Thread{
+            public void run(){
+                Actions.runBlocking(goToBasketTwo.build());
+            }
+        }
+        drive2 tobasket2 = new drive2();
+        tobasket2.start();
+        score.start();
+        try {
+            tobasket2.join();
+            score.join();
+        } catch (InterruptedException e){
+            //empty
+        }
+//        Actions.runBlocking(arm.moveArmAction(92, 1));
         upperBasket();
+
+
+
         Actions.runBlocking(wrist.setWristPositionAction(0.57));
-        Actions.runBlocking(goToSampleThree.build());
-        Actions.runBlocking(arm.moveArmAction(5, 1));
+        class turnsample3 extends Thread{
+            public void run(){
+                Actions.runBlocking(goToSampleThree.build());
+            }
+        }
+        turnsample3 turnto3 = new turnsample3();
+        turnto3.start();
+        armmove.start();
+        try {
+            turnto3.join();
+            armmove.join();
+        } catch (InterruptedException e){
+            //empty
+        }
+
+
+        Actions.runBlocking(arm.moveArmAction(20,1));
+        Actions.runBlocking(lift.moveSlideAction(655,1));
         Actions.runBlocking(claw.closeClaw());
-        sleep(100);
+        sleep(200);
         Actions.runBlocking(arm.moveArmAction(105, 1));
-        Actions.runBlocking(goToBasketThree.build());
+
+
+//        sleep(100);
+        class drive3 extends Thread{
+            public void run(){
+                Actions.runBlocking(goToBasketThree.build());
+            }
+        }
+
+        drive3 tobasket3 = new drive3();
+        tobasket3.start();
+        score.start();
+        try {
+            tobasket2.join();
+            score.join();
+        } catch (InterruptedException e){
+            //empty
+        }
         upperBasket();
+
+
+
         Actions.runBlocking(lift.moveSlideAction(0, 1));
         Actions.runBlocking(arm.moveArmAction(105, 1));
         Actions.runBlocking(goToAscent.build());
@@ -93,14 +226,13 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
     private void upperBasket()
     {
-        Actions.runBlocking(arm.moveArmAction(100, 1));     // Step 3: Lift arm
-        Actions.runBlocking(wrist.setWristPositionAction(0.66));
-        Actions.runBlocking(lift.moveSlideAction(655, 1));  // Step 4: Extend slide
-        Actions.runBlocking(arm.moveArmAction(92, 1));      // Step 5: Position arm
+              // Step 5: Position arm
+
+        Actions.runBlocking(arm.moveArmAction(92, 1));
         Actions.runBlocking(claw.openClaw());
         sleep(100);
-        Actions.runBlocking(arm.moveArmAction(100, 1));
-        Actions.runBlocking(lift.moveSlideAction(482, 1));    // Step 8: Retract slide
+        Actions.runBlocking(arm.moveArmAction(105, 1));
+        Actions.runBlocking(lift.moveSlideAction(475, 1));    // Step 8: Retract slide
     }
     public class Arm {
         private DcMotorEx armMotor;
