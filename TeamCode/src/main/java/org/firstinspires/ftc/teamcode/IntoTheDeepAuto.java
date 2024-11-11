@@ -66,7 +66,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         Actions.runBlocking(claw.closeClaw());
         sleep(100);
         Actions.runBlocking(arm.moveArmAction(100, 1));
-       // Actions.runBlocking(lift.moveSlideAction(0, 0.7));
+        // Actions.runBlocking(lift.moveSlideAction(0, 0.7));
         // Go To basket
         Actions.runBlocking(goToBasketOne.build());
         upperBasket();
