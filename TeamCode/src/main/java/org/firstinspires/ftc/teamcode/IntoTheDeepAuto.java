@@ -36,23 +36,23 @@ public class IntoTheDeepAuto extends LinearOpMode {
         lift = new Lift(hardwareMap);
 
         TrajectoryActionBuilder goToBasketZero = drive.actionBuilder(initialPose)
-                .splineTo(new Vector2d(53, 53), Math.toRadians(45.00));
+                .splineTo(new Vector2d(56, 53), Math.toRadians(45.00));
 
         TrajectoryActionBuilder goToSample1 = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
-                .turn(Math.toRadians(-150));
+                .turn(Math.toRadians(-154));
         TrajectoryActionBuilder goToBasketOne = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-160)))
-                .turn(Math.toRadians(205));
+                .turn(Math.toRadians(210));
         TrajectoryActionBuilder goToSampleTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
-                .turn(Math.toRadians(-130));
+                .turn(Math.toRadians(-132));
         TrajectoryActionBuilder goToBasketTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-135)))
-                .turn(Math.toRadians(205));
+                .turn(Math.toRadians(200));
         TrajectoryActionBuilder goToSampleThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
-                .turn(Math.toRadians(-108));
+                .turn(Math.toRadians(-110));
         TrajectoryActionBuilder goToBasketThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-105)))
-                .turn(Math.toRadians(140));
+                .turn(Math.toRadians(150));
 
         TrajectoryActionBuilder goToAscent = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45)))
-                .strafeTo(new Vector2d(50,0));
+                .strafeTo(new Vector2d(35,-20));
 
         waitForStart();
         if (isStopRequested()) return;
@@ -69,7 +69,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
             public void run() {
                 Actions.runBlocking(wrist.setWristPositionAction(0.66));
                 Actions.runBlocking(arm.moveArmAction(105, 1));     // Step 3: Lift arm
-                Actions.runBlocking(lift.moveSlideAction(655, 1));  // Step 4: Extend slide
+                Actions.runBlocking(lift.moveSlideAction(640, 1));  // Step 4: Extend slide
 
             }
         }
@@ -174,7 +174,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
 
 
-        Actions.runBlocking(wrist.setWristPositionAction(0.57));
+        Actions.runBlocking(wrist.setWristPositionAction(0.60));
         class turnsample3 extends Thread{
             public void run(){
                 Actions.runBlocking(goToSampleThree.build());
@@ -192,7 +192,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
 
         Actions.runBlocking(arm.moveArmAction(20,1));
-        Actions.runBlocking(lift.moveSlideAction(655,1));
+        Actions.runBlocking(lift.moveSlideAction(660,1));
         Actions.runBlocking(claw.closeClaw());
         sleep(200);
         Actions.runBlocking(arm.moveArmAction(105, 1));
@@ -214,13 +214,38 @@ public class IntoTheDeepAuto extends LinearOpMode {
         } catch (InterruptedException e){
             //empty
         }
+        sleep(500);
         upperBasket();
 
 
-
-        Actions.runBlocking(lift.moveSlideAction(0, 1));
-        Actions.runBlocking(arm.moveArmAction(105, 1));
-        Actions.runBlocking(goToAscent.build());
+        class retract extends Thread{
+            public void run(){
+                Actions.runBlocking(lift.moveSlideAction(0, 1));
+            }
+        }
+        class Park extends Thread{
+            public void run(){
+                Actions.runBlocking(goToAscent.build());
+            }
+        }
+        class Touch extends Thread{
+            public void run(){
+                Actions.runBlocking(arm.moveArmAction(150,1));
+            }
+        }
+        retract slideClose = new retract();
+        Park drivePark = new Park();
+        Touch touchbar = new Touch();
+        drivePark.start();
+        touchbar.start();
+        slideClose.start();
+        try{
+            drivePark.join();
+            touchbar.join();
+            slideClose.join();
+        } catch(InterruptedException e){
+            //empty
+        }
         // Step 8: Retract slide
     }
 
