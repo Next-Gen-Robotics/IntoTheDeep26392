@@ -25,7 +25,7 @@ public class IntoTheDeep extends LinearOpMode {
     final double LIFT_TICKS_PER_MM = (111132.0 / 289.0) / 120.0;
 
     // Variables for tracking positions
-    private double armPositionDegrees = 150; // Using degrees for arm position
+    private double armPositionDegrees = 145; // Using degrees for arm position
     private double slidePositionMM = 0.75;    // Using millimeters for slide position
     private double wristPosition = 0.66;      // Wrist servo position
     private final double joystickThreshold = 0.05; // Threshold to ignore minor joystick inputs
@@ -44,11 +44,11 @@ public class IntoTheDeep extends LinearOpMode {
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Set initial positions for arm and slide
-        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+         slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slideMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Wait for the game driver to press play

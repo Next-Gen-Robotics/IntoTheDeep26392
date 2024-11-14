@@ -230,7 +230,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         }
         class Touch extends Thread{
             public void run(){
-                Actions.runBlocking(arm.moveArmAction(150,1));
+                Actions.runBlocking(arm.moveArmAction(145,1));
             }
         }
         retract slideClose = new retract();
