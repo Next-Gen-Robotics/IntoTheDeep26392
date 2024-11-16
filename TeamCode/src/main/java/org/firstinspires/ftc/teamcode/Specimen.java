@@ -75,7 +75,7 @@ public class Specimen extends LinearOpMode {
         // go and pickup sample from the floor
         Actions.runBlocking(tab2.build());
         pickupSample();
-        Actions.runBlocking(arm.moveArmAction(30,1));
+        Actions.runBlocking(arm.moveArmAction(34,1));
         // Turn left and go to observation zone and drop sample
         Actions.runBlocking(tab3.build());
         pickupSpecimen();
@@ -84,7 +84,7 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(lift.moveSlideAction(140, 1));
         hangSample();
         Actions.runBlocking(tab4.build());
-        Actions.runBlocking(arm.moveArmAction(66, 1));
+        Actions.runBlocking(arm.moveArmAction(20, 1));
         Actions.runBlocking(lift.moveSlideAction(610, 1));
         Actions.runBlocking(claw.closeClaw());
         sleep(250);
@@ -108,7 +108,7 @@ public class Specimen extends LinearOpMode {
         //drop sample and pickup specimen and go to submersbile
         Actions.runBlocking(lift.moveSlideAction(295, 1));
         Actions.runBlocking(claw.openClaw());
-        sleep(250);
+        sleep(300);
         Actions.runBlocking(arm.moveArmAction(40,1));
         Actions.runBlocking(lift.moveSlideAction(510,1));
         //Actions.runBlocking(wrist.setWristPositionAction(0.66));
