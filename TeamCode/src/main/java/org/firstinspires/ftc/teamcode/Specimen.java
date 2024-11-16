@@ -50,7 +50,7 @@ public class Specimen extends LinearOpMode {
                 .strafeTo(new Vector2d(10,40));
         TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(10, 40.62, Math.toRadians(270)))
                // .turn(Math.toRadians(180))
-                .strafeTo(new Vector2d(-78.77,55));
+                .strafeTo(new Vector2d(-70,58));
         // turn to drop second sample
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(270)))
                 .turn(Math.toRadians(180));
@@ -68,7 +68,7 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(tab1.build());
         Actions.runBlocking(arm.moveArmAction(66, 1));// Step 2: Follow trajectory
         Actions.runBlocking(wrist.setWristPositionAction(0.66));
-        Actions.runBlocking(lift.moveSlideAction(140, 1));
+        Actions.runBlocking(lift.moveSlideAction(130, 1));
         //end of above prallell and then sequenctial starts
         //hang specimen
         hangSample();
@@ -84,6 +84,12 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(lift.moveSlideAction(140, 1));
         hangSample();
         Actions.runBlocking(tab4.build());
+        Actions.runBlocking(arm.moveArmAction(66, 1));
+        Actions.runBlocking(lift.moveSlideAction(610, 1));
+        Actions.runBlocking(claw.closeClaw());
+        sleep(250);
+        Actions.runBlocking(lift.moveSlideAction(0, 1));
+        Actions.runBlocking(arm.moveArmAction(0, 1));
         //sleep(1000);
         /* hangSample();
         Actions.runBlocking(tab4.build());
@@ -104,7 +110,7 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(claw.openClaw());
         sleep(250);
         Actions.runBlocking(arm.moveArmAction(40,1));
-        Actions.runBlocking(lift.moveSlideAction(500,1));
+        Actions.runBlocking(lift.moveSlideAction(510,1));
         //Actions.runBlocking(wrist.setWristPositionAction(0.66));
         Actions.runBlocking(claw.closeClaw());
         sleep(250);
@@ -125,7 +131,7 @@ public class Specimen extends LinearOpMode {
     private void pickupSample()
     {
         //pickup sample
-        Actions.runBlocking(lift.moveSlideAction(90, 1));
+        Actions.runBlocking(lift.moveSlideAction(100, 1));
         Actions.runBlocking(arm.moveArmAction(5, 1));
         Actions.runBlocking(claw.closeClaw());
         sleep(250);
