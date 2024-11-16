@@ -51,7 +51,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         TrajectoryActionBuilder goToBasketThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-105)))
                 .turn(Math.toRadians(150));
 
-        TrajectoryActionBuilder goToAscent = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45)))
+        TrajectoryActionBuilder goToAscent = drive.actionBuilder(new Pose2d(53, 60, Math.toRadians(45)))
                 .strafeTo(new Vector2d(35,-20));
 
         waitForStart();
@@ -255,7 +255,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
         Actions.runBlocking(arm.moveArmAction(92, 1));
         Actions.runBlocking(claw.openClaw());
-        sleep(100);
+        sleep(200);
         Actions.runBlocking(arm.moveArmAction(105, 1));
         Actions.runBlocking(lift.moveSlideAction(475, 1));    // Step 8: Retract slide
     }

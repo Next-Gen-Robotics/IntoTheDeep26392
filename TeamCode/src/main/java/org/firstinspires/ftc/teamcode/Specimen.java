@@ -43,9 +43,12 @@ public class Specimen extends LinearOpMode {
                 .strafeTo(new Vector2d(-62.77,40));
         // turn to drop first sample
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(270)))
-                .turn(Math.toRadians(180));
+                .turn(Math.toRadians(210));
                // .strafeTo(new Vector2d(-35,40.62));
         //turn and go to second sample
+        TrajectoryActionBuilder tosubmersible1 = drive.actionBuilder(new Pose2d(-67.66,40.62, Math.toRadians(210)))
+                .turn(Math.toRadians(180))
+                .strafeTo(new Vector2d(-9.50,40));
         TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(90)))
                 .turn(Math.toRadians(180))
                 .strafeTo(new Vector2d(-78.77,40.62));
@@ -76,11 +79,25 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(lift.moveSlideAction(90, 1));
         Actions.runBlocking(tab2.build());
         pickupSample();
+        Actions.runBlocking(arm.moveArmAction(20,1));
         // Turn left and go to observation zone and drop sample
         Actions.runBlocking(tab3.build());
         Actions.runBlocking(claw.openClaw());
-        sleep(100);
-        Actions.runBlocking(lift.moveSlideAction(0, 1));
+        sleep(1000);
+        Actions.runBlocking(arm.moveArmAction(35,1));
+        Actions.runBlocking(lift.moveSlideAction(480,1));
+        Actions.runBlocking(wrist.setWristPositionAction(0.66));
+        Actions.runBlocking(claw.closeClaw());
+        sleep(1000);
+        Actions.runBlocking(arm.moveArmAction(66,1));
+        Actions.runBlocking(lift.moveSlideAction(140, 1));
+        sleep(1000);
+        Actions.runBlocking(tosubmersible1.build());
+        sleep(1000);
+        Actions.runBlocking(arm.moveArmAction(58, 0.5));// Step 2: Follow trajectory
+        Actions.runBlocking(lift.moveSlideAction(250, 0.5));
+        Actions.runBlocking(claw.openClaw());
+
         Actions.runBlocking(tab4.build());
         Actions.runBlocking(arm.moveArmAction(35,0.5));
         pickupSecondSample();
