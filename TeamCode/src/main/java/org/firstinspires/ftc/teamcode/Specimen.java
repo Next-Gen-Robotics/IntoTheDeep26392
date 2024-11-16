@@ -44,14 +44,13 @@ public class Specimen extends LinearOpMode {
         // turn to drop first sample
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(270)))
                 .turn(Math.toRadians(210));
-               // .strafeTo(new Vector2d(-35,40.62));
         //turn and go to second sample
         TrajectoryActionBuilder tosubmersible1 = drive.actionBuilder(new Pose2d(-67.66,40.62, Math.toRadians(210)))
-                .turn(Math.toRadians(180))
-                .strafeTo(new Vector2d(-9.50,40));
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(90)))
-                .turn(Math.toRadians(180))
-                .strafeTo(new Vector2d(-78.77,40.62));
+                .turn(Math.toRadians(-300))
+                .strafeTo(new Vector2d(10,40));
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(10, 40.62, Math.toRadians(270)))
+               // .turn(Math.toRadians(180))
+                .strafeTo(new Vector2d(-78.77,55));
         // turn to drop second sample
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(270)))
                 .turn(Math.toRadians(180));
@@ -70,54 +69,68 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(arm.moveArmAction(66, 1));// Step 2: Follow trajectory
         Actions.runBlocking(wrist.setWristPositionAction(0.66));
         Actions.runBlocking(lift.moveSlideAction(140, 1));
-
         //end of above prallell and then sequenctial starts
-        Actions.runBlocking(arm.moveArmAction(58, 0.5));// Step 2: Follow trajectory
-        Actions.runBlocking(lift.moveSlideAction(300, 0.5));
-        Actions.runBlocking(claw.openClaw());
-        sleep(100);
-        Actions.runBlocking(lift.moveSlideAction(90, 1));
+        //hang specimen
+        hangSample();
+        // go and pickup sample from the floor
         Actions.runBlocking(tab2.build());
         pickupSample();
-        Actions.runBlocking(arm.moveArmAction(20,1));
+        Actions.runBlocking(arm.moveArmAction(30,1));
         // Turn left and go to observation zone and drop sample
         Actions.runBlocking(tab3.build());
-        Actions.runBlocking(claw.openClaw());
-        sleep(1000);
-        Actions.runBlocking(arm.moveArmAction(35,1));
-        Actions.runBlocking(lift.moveSlideAction(480,1));
-        Actions.runBlocking(wrist.setWristPositionAction(0.66));
-        Actions.runBlocking(claw.closeClaw());
-        sleep(1000);
-        Actions.runBlocking(arm.moveArmAction(66,1));
-        Actions.runBlocking(lift.moveSlideAction(140, 1));
-        sleep(1000);
+        pickupSpecimen();
         Actions.runBlocking(tosubmersible1.build());
-        sleep(1000);
-        Actions.runBlocking(arm.moveArmAction(58, 0.5));// Step 2: Follow trajectory
-        Actions.runBlocking(lift.moveSlideAction(250, 0.5));
-        Actions.runBlocking(claw.openClaw());
-
+        //sleep(1000);
+        Actions.runBlocking(lift.moveSlideAction(140, 1));
+        hangSample();
+        Actions.runBlocking(tab4.build());
+        //sleep(1000);
+        /* hangSample();
         Actions.runBlocking(tab4.build());
         Actions.runBlocking(arm.moveArmAction(35,0.5));
         pickupSecondSample();
         Actions.runBlocking(tab5.build());
-        Actions.runBlocking(claw.openClaw());
-        sleep(100);
+        pickupSpecimen();
         Actions.runBlocking(lift.moveSlideAction(0,0.5));
         Actions.runBlocking(arm.moveArmAction(0,0.5));
         Actions.runBlocking(tab6.build());
+        */
+    }
+   // it drops sample and pickups specimen
+    private void pickupSpecimen()
+    {
+        //drop sample and pickup specimen and go to submersbile
+        Actions.runBlocking(lift.moveSlideAction(295, 1));
+        Actions.runBlocking(claw.openClaw());
+        sleep(250);
+        Actions.runBlocking(arm.moveArmAction(40,1));
+        Actions.runBlocking(lift.moveSlideAction(500,1));
+        //Actions.runBlocking(wrist.setWristPositionAction(0.66));
+        Actions.runBlocking(claw.closeClaw());
+        sleep(250);
+        Actions.runBlocking(arm.moveArmAction(100,1));
+        Actions.runBlocking(lift.moveSlideAction(70, 1));
+        //sleep(250);
+
+    }
+    private  void hangSample()
+    {
+        Actions.runBlocking(arm.moveArmAction(58, 1));// Step 2: Follow trajectory
+        Actions.runBlocking(lift.moveSlideAction(300, 1));
+        Actions.runBlocking(claw.openClaw());
+        sleep(250);
+        Actions.runBlocking(lift.moveSlideAction(90, 1));
     }
 
     private void pickupSample()
     {
         //pickup sample
         Actions.runBlocking(lift.moveSlideAction(90, 1));
-        Actions.runBlocking(arm.moveArmAction(5, 0.5));
+        Actions.runBlocking(arm.moveArmAction(5, 1));
         Actions.runBlocking(claw.closeClaw());
-        sleep(500);
-        Actions.runBlocking(arm.moveArmAction(20, 0.5));
-        Actions.runBlocking(lift.moveSlideAction(300, 0.5));
+        sleep(250);
+        Actions.runBlocking(arm.moveArmAction(20, 1));
+        //Actions.runBlocking(lift.moveSlideAction(300, 0.5));
     }
 
     private void pickupSecondSample()
@@ -128,7 +141,7 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(claw.closeClaw());
         sleep(500);
         Actions.runBlocking(arm.moveArmAction(20, 0.5));
-        Actions.runBlocking(lift.moveSlideAction(300, 0.5));
+       // Actions.runBlocking(lift.moveSlideAction(300, 0.5));
     }
 
     public class Arm {
