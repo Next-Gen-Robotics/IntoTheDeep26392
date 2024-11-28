@@ -69,7 +69,6 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
 
     public GoBildaPinpointDriver(I2cDeviceSynchSimple deviceClient, boolean deviceClientIsOwned) {
         super(deviceClient, deviceClientIsOwned);
-
         this.deviceClient.setI2cAddress(I2cAddr.create7bit(DEFAULT_ADDRESS));
         super.registerArmingStateCallback(false);
     }
