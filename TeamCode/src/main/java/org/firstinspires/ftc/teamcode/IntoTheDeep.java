@@ -32,8 +32,8 @@ public class IntoTheDeep extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        // Initialize hardware and MecanumDrive
-        drive = new MecanumDrive(hardwareMap, new Pose2d(-24, -72, Math.toRadians(180)));
+        // Initialize hardware and PinpointDrive
+        drive = new PinpointDrive(hardwareMap, new Pose2d(-24, -72, Math.toRadians(180)));
         slideMotor = hardwareMap.get(DcMotorEx.class, "slideMotor");
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         wrist = hardwareMap.get(Servo.class, "wrist");
@@ -56,7 +56,7 @@ public class IntoTheDeep extends LinearOpMode {
 
         // Main OpMode loop
         while (opModeIsActive()) {
-            // Drivetrain controls using MecanumDrive
+            // Drivetrain controls using PinpointDrive
             double y = -gamepad1.left_stick_y; // Forward/backward
             double x = - gamepad1.left_stick_x;  // Left/right strafing
             double rx = - gamepad1.right_stick_x; // Rotation

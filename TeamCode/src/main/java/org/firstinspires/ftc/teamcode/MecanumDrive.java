@@ -52,7 +52,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Config
-public final class MecanumDrive {
+public class MecanumDrive {
     public static class Params {
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
@@ -61,15 +61,17 @@ public final class MecanumDrive {
 
         // drive model parameters
         // Traveled distance in inches 119/ 114/38674
-        public double inPerTick = 0.0029477168123287; // 0.0243572395128552; //Default 1
+        public double inPerTick = 1.0; //0.0029477168123287;  //Default 1
         //Lateral,distance in inches 104 /Ticks -1282
         // 0.002428535317457635
-        public double lateralInPerTick =  0.002398141936572116; //manual 0.026890756302521;  // default inPerTick;
-        public double trackWidthTicks =  4567.58608101934; //1135.7256202481983;  // default zero
+        public double lateralInPerTick = 0.7489951132156097;  //0.002398141936572116; //manual 0.026890756302521;  // default inPerTick;
+        public double trackWidthTicks =  13.555511777271882;   //4567.58608101934; //1135.7256202481983;  // default zero
 
         // feedforward parameters (in tick units)
-        public double kS = 0.9649515589830022;
-        public double kV = 0.00035; // Adjusted for higher velocity
+        //kV: 0.13075359039802875, kS: 1.1161835621137768
+        //kV: 0.13082349210867808, kS: 1.1155820004422665
+        public double kS = 1.1155820004422665; //0.9649515589830022;
+        public double kV = 0.13082349210867808; //0.00035; // Adjusted for higher velocity
         public double kA = 0.00008;
         // public double kV = 0.000426;  ///0.0005269879619291605;
         // public double kA = 0.0001;
@@ -119,7 +121,7 @@ public final class MecanumDrive {
     public final Localizer localizer;
     public Pose2d pose;
 
-    private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
+    public final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
     private final DownsampledWriter estimatedPoseWriter = new DownsampledWriter("ESTIMATED_POSE", 50_000_000);
     private final DownsampledWriter targetPoseWriter = new DownsampledWriter("TARGET_POSE", 50_000_000);
@@ -130,7 +132,7 @@ public final class MecanumDrive {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
         public final IMU imu;
 
-        private int lastLeftFrontPos, lastLeftBackPos, lastRightBackPos, lastRightFrontPos;
+        private double lastLeftFrontPos, lastLeftBackPos, lastRightBackPos, lastRightFrontPos;
         private Rotation2d lastHeading;
         private boolean initialized;
 
@@ -237,8 +239,7 @@ public final class MecanumDrive {
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        //localizer = new DriveLocalizer();
-        localizer = new TwoDeadWheelLocalizer(hardwareMap, lazyImu.get(), PARAMS.inPerTick);
+        localizer = new DriveLocalizer();
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }

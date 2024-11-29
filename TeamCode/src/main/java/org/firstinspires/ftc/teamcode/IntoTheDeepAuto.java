@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Autonomous(name="IntoTheDeepAuto", group="Autonomous")
 public class IntoTheDeepAuto extends LinearOpMode {
 
-    private MecanumDrive drive;
+    private PinpointDrive drive;
     private Arm arm;
     private Lift lift;
     private Wrist wrist;
@@ -29,7 +29,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
         Pose2d initialPose = new Pose2d(14.57, 62.61, Math.toRadians(-90));
-        drive = new MecanumDrive(hardwareMap, initialPose);
+        drive = new PinpointDrive(hardwareMap, initialPose);
         claw = new Claw(hardwareMap);
         arm = new Arm(hardwareMap);
         wrist = new Wrist(hardwareMap);
