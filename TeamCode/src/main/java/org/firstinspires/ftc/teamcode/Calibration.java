@@ -24,7 +24,7 @@ public class Calibration extends LinearOpMode {
     private double armPositionDegrees = 0; // Using degrees for arm position
     private double slidePositionMM = 0;    // Using millimeters for slide position
     private double wristPosition = 0.98;   // Wrist servo position
-    private double clawPosition = 0.5;     // Initial position for the claw
+    private double clawPosition = 0.526;     // Initial position for the claw
 
     @Override
     public void runOpMode() {

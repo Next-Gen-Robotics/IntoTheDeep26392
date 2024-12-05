@@ -36,35 +36,37 @@ public class IntoTheDeepAuto extends LinearOpMode {
         lift = new Lift(hardwareMap);
 
         TrajectoryActionBuilder goToBasketZero = drive.actionBuilder(initialPose)
-                .splineTo(new Vector2d(56, 53), Math.toRadians(45.00));
+                .splineTo(new Vector2d(53, 53), Math.toRadians(45.00));
 
         TrajectoryActionBuilder goToSample1 = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
-                .turn(Math.toRadians(-154));
+                .turn(Math.toRadians(-130));
         TrajectoryActionBuilder goToBasketOne = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-160)))
-                .turn(Math.toRadians(210));
+                .turn(Math.toRadians(180));
+
         TrajectoryActionBuilder goToSampleTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
-                .turn(Math.toRadians(-132));
-        TrajectoryActionBuilder goToBasketTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-135)))
-                .turn(Math.toRadians(200));
-        TrajectoryActionBuilder goToSampleThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
                 .turn(Math.toRadians(-110));
+        TrajectoryActionBuilder goToBasketTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-135)))
+                .turn(Math.toRadians(160));
+
+        TrajectoryActionBuilder goToSampleThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
+                .turn(Math.toRadians(-95));
         TrajectoryActionBuilder goToBasketThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-105)))
-                .turn(Math.toRadians(150));
+                .turn(Math.toRadians(140));
 
         TrajectoryActionBuilder goToAscent = drive.actionBuilder(new Pose2d(53, 60, Math.toRadians(45)))
-                .strafeTo(new Vector2d(35,-20));
+                .strafeTo(new Vector2d(30,-5));
 
         waitForStart();
         if (isStopRequested()) return;
 
         // Execute each step in the sequence individually using runBlocking
-        Actions.runBlocking(claw.closeClaw());                // Step 1: Close the claw
+        Actions.runBlocking(claw.closeClaw());
         class drive0 extends Thread{
             public void run() {
                 Actions.runBlocking(goToBasketZero.build());
             }
         }
-                          // Step 2: Follow trajectory
+        // Step 2: Follow trajectory
         class UpBPart1 extends Thread {
             public void run() {
                 Actions.runBlocking(wrist.setWristPositionAction(0.66));
@@ -174,7 +176,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
 
 
 
-        Actions.runBlocking(wrist.setWristPositionAction(0.60));
+        Actions.runBlocking(wrist.setWristPositionAction(0.66));
         class turnsample3 extends Thread{
             public void run(){
                 Actions.runBlocking(goToSampleThree.build());
@@ -392,7 +394,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         }
 
         public Action closeClaw() {
-            return new ClawPositionAction(0.5581);
+            return new ClawPositionAction(0.526);
         }
 
         public Action openClaw() {
