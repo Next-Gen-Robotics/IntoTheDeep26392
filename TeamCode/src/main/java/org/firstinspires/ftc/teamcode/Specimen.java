@@ -44,20 +44,19 @@ public class Specimen extends LinearOpMode {
         // turn to drop first sample
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-47.5, 40, Math.toRadians(270)))
                 .turn(Math.toRadians(160));
-        //turn and go to second sample
-        TrajectoryActionBuilder tosubmersible1 = drive.actionBuilder(new Pose2d(-47.5,40, Math.toRadians(160)))
-
-                .strafeTo(new Vector2d(0,40))
-                .turn(Math.toRadians(-190));
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(10, 40, Math.toRadians(-160)))
-               // .turn(Math.toRadians(180))
-                .strafeTo(new Vector2d(-58.5,40));
+        //turn and go to hang second sample
+        TrajectoryActionBuilder tosubmersible1 = drive.actionBuilder(new Pose2d(-47.5,40, Math.toRadians(90)))
+                .turn(Math.toRadians(-165))
+                .strafeTo(new Vector2d(-5,40));
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(10, 40, Math.toRadians(270)))
+                .lineToY(50)
+                .strafeTo(new Vector2d(-56,50));
         // turn to drop second sample
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-58.5, 40, Math.toRadians(270)))
-                .turn(Math.toRadians(180));
+                .turn(Math.toRadians(160));
         // turn for parking
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-67.77, 40, Math.toRadians(90)))
-                .turn(Math.toRadians(-180))
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-67.77, 40, Math.toRadians(110)))
+                .turn(Math.toRadians(-160))
                 .strafeTo(new Vector2d(-79.77,55.62));
 
         waitForStart();
@@ -67,7 +66,7 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(claw.closeClaw());                // Step 1: Close the claw
         //below are parallel actions
         Actions.runBlocking(tab1.build());
-        Actions.runBlocking(arm.moveArmAction(66, 1));// Step 2: Follow trajectory
+        Actions.runBlocking(arm.moveArmAction(67, 1));// Step 2: Follow trajectory
         Actions.runBlocking(wrist.setWristPositionAction(0.66));
         Actions.runBlocking(lift.moveSlideAction(130, 1));
         //end of above prallell and then sequenctial starts
@@ -80,9 +79,11 @@ public class Specimen extends LinearOpMode {
         // Turn left and go to observation zone and drop sample
         Actions.runBlocking(tab3.build());
         pickupSpecimen();
+        //Actions.runBlocking(arm.moveArmAction(66, 1));// Step 2: Follow trajectory
+        Actions.runBlocking(lift.moveSlideAction(130, 1));
         Actions.runBlocking(tosubmersible1.build());
         //sleep(1000);
-        Actions.runBlocking(lift.moveSlideAction(140, 1));
+        Actions.runBlocking(lift.moveSlideAction(120, 1));
         hangSample();
         Actions.runBlocking(tab4.build());
         Actions.runBlocking(arm.moveArmAction(20, 1));
@@ -107,14 +108,14 @@ public class Specimen extends LinearOpMode {
     private void pickupSpecimen()
     {
         //drop sample and pickup specimen and go to submersbile
-        Actions.runBlocking(lift.moveSlideAction(295, 1));
+        Actions.runBlocking(lift.moveSlideAction(285, 1));
         Actions.runBlocking(claw.openClaw());
-        sleep(300);
-        Actions.runBlocking(arm.moveArmAction(35,1));
+        sleep(100);
+        Actions.runBlocking(arm.moveArmAction(37,0.5));
         Actions.runBlocking(lift.moveSlideAction(470,1));
         //Actions.runBlocking(wrist.setWristPositionAction(0.66));
         Actions.runBlocking(claw.closeClaw());
-        sleep(50);
+        sleep(250);
         Actions.runBlocking(arm.moveArmAction(100,1));
 //        Actions.runBlocking(lift.moveSlideAction(70, 1));
         //sleep(250);
@@ -123,7 +124,7 @@ public class Specimen extends LinearOpMode {
     private  void hangSample()
     {
         Actions.runBlocking(arm.moveArmAction(58, 1));// Step 2: Follow trajectory
-        Actions.runBlocking(lift.moveSlideAction(300, 1));
+        Actions.runBlocking(lift.moveSlideAction(290, 1));
         Actions.runBlocking(claw.openClaw());
         sleep(250);
         Actions.runBlocking(lift.moveSlideAction(0, 1));
