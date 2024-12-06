@@ -53,7 +53,7 @@ public class Calibration extends LinearOpMode {
             } else if (gamepad1.left_bumper) {
                 slidePositionMM -= 5; // Lower slide
             }
-            slidePositionMM = Range.clip(slidePositionMM, 0, 650); // Limit slide position
+            slidePositionMM = Range.clip(slidePositionMM, 0, 600); // Limit slide position
             int slideTargetPosition = (int) (slidePositionMM * LIFT_TICKS_PER_MM); // Convert mm to ticks
             slideMotor.setTargetPosition(slideTargetPosition);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

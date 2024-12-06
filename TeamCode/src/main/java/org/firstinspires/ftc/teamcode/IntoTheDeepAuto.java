@@ -54,7 +54,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
                 .turn(Math.toRadians(140));
 
         TrajectoryActionBuilder goToAscent = drive.actionBuilder(new Pose2d(53, 60, Math.toRadians(45)))
-                .strafeTo(new Vector2d(30,-5));
+                .strafeTo(new Vector2d(28,-3));
 
         waitForStart();
         if (isStopRequested()) return;

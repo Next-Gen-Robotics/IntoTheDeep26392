@@ -39,23 +39,23 @@ public class Specimen extends LinearOpMode {
                 .lineToY(40);
 
         // Go to first sample
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-9.50, 35, Math.toRadians(270)))
-                .strafeTo(new Vector2d(-62.77,40));
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-9.50, 40, Math.toRadians(270)))
+                .strafeTo(new Vector2d(-47.5,40));
         // turn to drop first sample
-        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(270)))
-                .turn(Math.toRadians(210));
+        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-47.5, 40, Math.toRadians(270)))
+                .turn(Math.toRadians(160));
         //turn and go to second sample
-        TrajectoryActionBuilder tosubmersible1 = drive.actionBuilder(new Pose2d(-67.66,40.62, Math.toRadians(210)))
-                .turn(Math.toRadians(-300))
+        TrajectoryActionBuilder tosubmersible1 = drive.actionBuilder(new Pose2d(-47.5,40, Math.toRadians(160)))
+                .turn(Math.toRadians(-160))
                 .strafeTo(new Vector2d(10,40));
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(10, 40.62, Math.toRadians(270)))
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(10, 40, Math.toRadians(-160)))
                // .turn(Math.toRadians(180))
-                .strafeTo(new Vector2d(-70,58));
+                .strafeTo(new Vector2d(-58.5,40));
         // turn to drop second sample
-        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(270)))
+        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-58.5, 40, Math.toRadians(270)))
                 .turn(Math.toRadians(180));
         // turn for parking
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-67.77, 40.62, Math.toRadians(90)))
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-67.77, 40, Math.toRadians(90)))
                 .turn(Math.toRadians(-180))
                 .strafeTo(new Vector2d(-79.77,55.62));
 
@@ -75,7 +75,7 @@ public class Specimen extends LinearOpMode {
         // go and pickup sample from the floor
         Actions.runBlocking(tab2.build());
         pickupSample();
-        Actions.runBlocking(arm.moveArmAction(34,1));
+        Actions.runBlocking(arm.moveArmAction(30,1));
         // Turn left and go to observation zone and drop sample
         Actions.runBlocking(tab3.build());
         pickupSpecimen();
@@ -125,13 +125,13 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(lift.moveSlideAction(300, 1));
         Actions.runBlocking(claw.openClaw());
         sleep(250);
-        Actions.runBlocking(lift.moveSlideAction(90, 1));
+        Actions.runBlocking(lift.moveSlideAction(0, 1));
     }
 
     private void pickupSample()
     {
         //pickup sample
-        Actions.runBlocking(lift.moveSlideAction(100, 1));
+        Actions.runBlocking(lift.moveSlideAction(0, 1));
         Actions.runBlocking(arm.moveArmAction(5, 1));
         Actions.runBlocking(claw.closeClaw());
         sleep(250);

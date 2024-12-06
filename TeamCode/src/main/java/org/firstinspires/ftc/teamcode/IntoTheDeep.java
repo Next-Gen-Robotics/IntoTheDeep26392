@@ -72,15 +72,15 @@ public class IntoTheDeep extends LinearOpMode {
 
             // Slide control using bumpers
             if (gamepad1.right_bumper) {
-                slidePositionMM += 5; // Raise slide
+                slidePositionMM += 15; // Raise slide
             } else if (gamepad1.left_bumper) {
-                slidePositionMM -= 5; // Lower slide
+                slidePositionMM -= 15; // Lower slide
             }
             slidePositionMM = Range.clip(slidePositionMM, 0, 650); // Limit slide position
             int slideTargetPosition = (int) (slidePositionMM * LIFT_TICKS_PER_MM); // Convert mm to ticks
             slideMotor.setTargetPosition(slideTargetPosition);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(0.5);
+            slideMotor.setPower(1);
 
             // Arm control using D-pad up/down
             if (gamepad1.dpad_up) {
