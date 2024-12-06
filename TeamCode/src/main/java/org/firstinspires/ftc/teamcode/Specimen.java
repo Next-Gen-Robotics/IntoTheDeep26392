@@ -46,7 +46,7 @@ public class Specimen extends LinearOpMode {
                 .turn(Math.toRadians(160));
         //turn and go to second sample
         TrajectoryActionBuilder tosubmersible1 = drive.actionBuilder(new Pose2d(-47.5,40, Math.toRadians(160)))
-                .turn(Math.toRadians(-160))
+                .turn(Math.toRadians(-180))
                 .strafeTo(new Vector2d(10,40));
         TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(10, 40, Math.toRadians(-160)))
                // .turn(Math.toRadians(180))
@@ -109,7 +109,7 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(lift.moveSlideAction(295, 1));
         Actions.runBlocking(claw.openClaw());
         sleep(300);
-        Actions.runBlocking(arm.moveArmAction(40,1));
+        Actions.runBlocking(arm.moveArmAction(35,1));
         Actions.runBlocking(lift.moveSlideAction(510,1));
         //Actions.runBlocking(wrist.setWristPositionAction(0.66));
         Actions.runBlocking(claw.closeClaw());
@@ -132,7 +132,7 @@ public class Specimen extends LinearOpMode {
     {
         //pickup sample
         Actions.runBlocking(lift.moveSlideAction(0, 1));
-        Actions.runBlocking(arm.moveArmAction(5, 1));
+        Actions.runBlocking(arm.moveArmAction(0, 1));
         Actions.runBlocking(claw.closeClaw());
         sleep(250);
         Actions.runBlocking(arm.moveArmAction(20, 1));

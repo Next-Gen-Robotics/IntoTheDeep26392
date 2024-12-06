@@ -72,9 +72,9 @@ public class IntoTheDeep extends LinearOpMode {
 
             // Slide control using bumpers
             if (gamepad1.right_bumper) {
-                slidePositionMM += 15; // Raise slide
+                slidePositionMM += 20; // Raise slide
             } else if (gamepad1.left_bumper) {
-                slidePositionMM -= 15; // Lower slide
+                slidePositionMM -= 20; // Lower slide
             }
             slidePositionMM = Range.clip(slidePositionMM, 0, 650); // Limit slide position
             int slideTargetPosition = (int) (slidePositionMM * LIFT_TICKS_PER_MM); // Convert mm to ticks
