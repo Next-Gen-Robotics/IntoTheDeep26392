@@ -51,7 +51,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         TrajectoryActionBuilder goToSampleThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
                 .turn(Math.toRadians(-95));
         TrajectoryActionBuilder goToBasketThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-105)))
-                .turn(Math.toRadians(135));
+                .turn(Math.toRadians(132));
 
         TrajectoryActionBuilder goToAscent = drive.actionBuilder(new Pose2d(53, 60, Math.toRadians(45)))
                 .strafeTo(new Vector2d(28,-3));
