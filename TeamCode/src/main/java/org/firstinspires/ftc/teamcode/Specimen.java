@@ -40,17 +40,17 @@ public class Specimen extends LinearOpMode {
 
         // Go to first sample
         TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-9.50, 40, Math.toRadians(270)))
-                .strafeTo(new Vector2d(-47.5,40));
+                .strafeTo(new Vector2d(-47,40));
         // turn to drop first sample
-        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-47.5, 40, Math.toRadians(270)))
+        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-47, 40, Math.toRadians(270)))
                 .turn(Math.toRadians(160));
         //turn and go to hang second sample
-        TrajectoryActionBuilder tosubmersible1 = drive.actionBuilder(new Pose2d(-47.5,40, Math.toRadians(90)))
+        TrajectoryActionBuilder tosubmersible1 = drive.actionBuilder(new Pose2d(-47,40, Math.toRadians(90)))
                 .turn(Math.toRadians(-165))
                 .strafeTo(new Vector2d(-5,40));
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(10, 40, Math.toRadians(270)))
-                .lineToY(50)
-                .strafeTo(new Vector2d(-56,50));
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-5, 40, Math.toRadians(270)))
+                .lineToY(54)
+                .strafeTo(new Vector2d(-56,54));
         // turn to drop second sample
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-58.5, 40, Math.toRadians(270)))
                 .turn(Math.toRadians(160));
@@ -62,20 +62,40 @@ public class Specimen extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
 
-        // Execute each step in the sequence individually using runBlocking
-        Actions.runBlocking(claw.closeClaw());                // Step 1: Close the claw
-        //below are parallel actions
-        Actions.runBlocking(tab1.build());
-        Actions.runBlocking(arm.moveArmAction(67, 1));// Step 2: Follow trajectory
-        Actions.runBlocking(wrist.setWristPositionAction(0.66));
-        Actions.runBlocking(lift.moveSlideAction(130, 1));
-        //end of above prallell and then sequenctial starts
-        //hang specimen
+        //hold preloaded specimen before doing anything
+        Actions.runBlocking(claw.closeClaw());
+
+        class DriveZero extends Thread {
+            public void run() {
+                Actions.runBlocking(tab1.build());
+            }
+        }
+
+        class HangSpecimenZero extends Thread {
+            public void run() {
+                Actions.runBlocking(arm.moveArmAction(68, 1));// Step 2: Follow trajectory
+                Actions.runBlocking(wrist.setWristPositionAction(0.66));
+                Actions.runBlocking(lift.moveSlideAction(130, 1));
+            }
+        }
+
+        DriveZero driveZero= new DriveZero();
+        HangSpecimenZero hangSpecimenZero= new HangSpecimenZero();
+        hangSpecimenZero.start();
+        driveZero.start();;
+        try {
+            hangSpecimenZero.join();
+            driveZero.join();;
+        } catch (InterruptedException e) {
+            //empty
+        }
+
         hangSample();
+        //end of hanging preloaded specimen
         // go and pickup sample from the floor
         Actions.runBlocking(tab2.build());
         pickupSample();
-        Actions.runBlocking(arm.moveArmAction(30,1));
+        Actions.runBlocking(arm.moveArmAction(39,1));
         // Turn left and go to observation zone and drop sample
         Actions.runBlocking(tab3.build());
         pickupSpecimen();
@@ -104,15 +124,15 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(tab6.build());
         */
     }
-   // it drops sample and pickups specimen
+    // it drops sample and pickups specimen
     private void pickupSpecimen()
     {
         //drop sample and pickup specimen and go to submersbile
-        Actions.runBlocking(lift.moveSlideAction(285, 1));
+        Actions.runBlocking(lift.moveSlideAction(235, 1));
         Actions.runBlocking(claw.openClaw());
-        sleep(100);
-        Actions.runBlocking(arm.moveArmAction(37,0.5));
-        Actions.runBlocking(lift.moveSlideAction(470,1));
+        // sleep(100);
+        Actions.runBlocking(arm.moveArmAction(39,1));
+        Actions.runBlocking(lift.moveSlideAction(465,1));
         //Actions.runBlocking(wrist.setWristPositionAction(0.66));
         Actions.runBlocking(claw.closeClaw());
         sleep(250);
@@ -149,7 +169,7 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(claw.closeClaw());
         sleep(500);
         Actions.runBlocking(arm.moveArmAction(20, 0.5));
-       // Actions.runBlocking(lift.moveSlideAction(300, 0.5));
+        // Actions.runBlocking(lift.moveSlideAction(300, 0.5));
     }
 
     public class Arm {
