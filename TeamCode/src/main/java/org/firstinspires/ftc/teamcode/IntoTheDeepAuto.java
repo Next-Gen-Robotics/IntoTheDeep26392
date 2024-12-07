@@ -109,7 +109,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         } catch (InterruptedException e){
             //empty
         }
-        Actions.runBlocking(lift.moveSlideAction(660,1));
+        Actions.runBlocking(lift.moveSlideAction(660,0.5));
         Actions.runBlocking(claw.closeClaw());
         sleep(200);
         Actions.runBlocking(arm.moveArmAction(105, 1));
