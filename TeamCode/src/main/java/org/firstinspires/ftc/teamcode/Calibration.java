@@ -65,7 +65,7 @@ public class Calibration extends LinearOpMode {
             } else if (gamepad1.dpad_down) {
                 armPositionDegrees -= 2; // Lower arm
             }
-            armPositionDegrees = Range.clip(armPositionDegrees, 0, 140.5); // Limit arm position
+            armPositionDegrees = Range.clip(armPositionDegrees, 0, 106); // Limit arm position
             int armTargetPosition = (int) (armPositionDegrees * ARM_TICKS_PER_DEGREE); // Convert degrees to ticks
             armMotor.setTargetPosition(armTargetPosition);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

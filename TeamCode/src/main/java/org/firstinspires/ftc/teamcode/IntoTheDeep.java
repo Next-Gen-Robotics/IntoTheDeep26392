@@ -25,7 +25,7 @@ public class IntoTheDeep extends LinearOpMode {
     final double LIFT_TICKS_PER_MM = (111132.0 / 289.0) / 120.0;
 
     // Variables for tracking positions
-    private double armPositionDegrees = 5; // Using degrees for arm position
+    private double armPositionDegrees = 85; // Using degrees for arm position
     private double slidePositionMM = 0.75;    // Using millimeters for slide position
     private double wristPosition = 0.66;      // Wrist servo position
     private final double joystickThreshold = 0.05; // Threshold to ignore minor joystick inputs
@@ -88,7 +88,7 @@ public class IntoTheDeep extends LinearOpMode {
             } else if (gamepad1.dpad_down) {
                 armPositionDegrees -= 2; // Lower arm
             }
-            armPositionDegrees = Range.clip(armPositionDegrees, 0, 145); // Limit arm position
+            armPositionDegrees = Range.clip(armPositionDegrees, 0, 115); // Limit arm position
             int armTargetPosition = (int) (armPositionDegrees * ARM_TICKS_PER_DEGREE); // Convert degrees to ticks
             armMotor.setTargetPosition(armTargetPosition);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

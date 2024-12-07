@@ -41,12 +41,12 @@ public class IntoTheDeepAuto extends LinearOpMode {
         TrajectoryActionBuilder goToSample1 = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
                 .turn(Math.toRadians(-130));
         TrajectoryActionBuilder goToBasketOne = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-160)))
-                .turn(Math.toRadians(180));
+                .turn(Math.toRadians(170));
 
         TrajectoryActionBuilder goToSampleTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
                 .turn(Math.toRadians(-110));
         TrajectoryActionBuilder goToBasketTwo = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(-135)))
-                .turn(Math.toRadians(160));
+                .turn(Math.toRadians(15));
 
         TrajectoryActionBuilder goToSampleThree = drive.actionBuilder(new Pose2d(53, 53, Math.toRadians(45.00)))
                 .turn(Math.toRadians(-95));
@@ -54,7 +54,8 @@ public class IntoTheDeepAuto extends LinearOpMode {
                 .turn(Math.toRadians(132));
 
         TrajectoryActionBuilder goToAscent = drive.actionBuilder(new Pose2d(53, 60, Math.toRadians(45)))
-                .strafeTo(new Vector2d(28,-3));
+                .turn(Math.toRadians(160))
+                .strafeTo(new Vector2d(20,0));                 ;
 
         waitForStart();
         if (isStopRequested()) return;
@@ -232,7 +233,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
         }
         class Touch extends Thread{
             public void run(){
-                Actions.runBlocking(arm.moveArmAction(145,1));
+                Actions.runBlocking(arm.moveArmAction(80,1));
             }
         }
         retract slideClose = new retract();
@@ -255,7 +256,7 @@ public class IntoTheDeepAuto extends LinearOpMode {
     {
               // Step 5: Position arm
 
-        Actions.runBlocking(arm.moveArmAction(92, 1));
+        Actions.runBlocking(arm.moveArmAction(91, 1));
         Actions.runBlocking(claw.openClaw());
         sleep(200);
         Actions.runBlocking(arm.moveArmAction(105, 1));

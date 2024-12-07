@@ -135,7 +135,7 @@ public class Specimen extends LinearOpMode {
         Actions.runBlocking(lift.moveSlideAction(465,1));
         //Actions.runBlocking(wrist.setWristPositionAction(0.66));
         Actions.runBlocking(claw.closeClaw());
-        sleep(250);
+        sleep(200);
         Actions.runBlocking(arm.moveArmAction(100,1));
 //        Actions.runBlocking(lift.moveSlideAction(70, 1));
         //sleep(250);
